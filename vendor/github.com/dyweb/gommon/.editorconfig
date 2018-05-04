@@ -1,0 +1,29 @@
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+
+# Matches multiple files with brace expansion notation
+# Set default charset
+[*.{sh,go}]
+charset = utf-8
+# NOTE: gofmt use tab instead of space for golang code, the only trouble for using tab is yaml
+# > Gofmt formats Go programs. It uses tabs (width = 8) for indentation and blanks for alignmen
+# indent_style = space
+
+[*.{md}]
+indent_style = space
+indent_size = 2
+
+[*.{toml}]
+indent_style = space
+indent_size = 2
+
+[{.travis.yml}]
+indent_style = space
+indent_size = 2
+
+[Makefile]
+indent_style = tab

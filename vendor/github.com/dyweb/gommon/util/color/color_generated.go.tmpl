@@ -1,0 +1,21 @@
+package color
+
+
+const (
+{{ range . }}
+    {{ .Name }}Code = {{ .Code }}
+{{ end }}
+)
+
+const (
+{{ range . }}
+    {{ .Name }}Start = "\x1b[{{ .Code }}m"
+{{ end }}
+    End = "\x1b[0m"
+)
+
+{{ range . }}
+func {{ .Name }}(str string) string {
+    return "\x1b[{{ .Code }}m" + str + "\x1b[0m"
+}
+{{ end }}
