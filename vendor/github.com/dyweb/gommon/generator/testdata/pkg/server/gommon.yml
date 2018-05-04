@@ -1,0 +1,11 @@
+# configuration for gommon
+loggers:
+  - struct: "*Server"
+    receiver: srv
+shells:
+  - code: pwd
+    shell: true
+    cd: false
+  - code: pwd
+    shell: true
+    cd: true
