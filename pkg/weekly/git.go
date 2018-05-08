@@ -1,12 +1,12 @@
 package weekly
 
 import (
+	"context"
 	"fmt"
 	"os/exec"
 	"strings"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/dyweb/dy-bot/pkg/gh"
 	"github.com/google/go-github/github"
 )
@@ -19,7 +19,7 @@ func generateNewBranch() string {
 	dateStrSlice := strings.SplitN(timeStr, " ", 2)
 	dateStr := dateStrSlice[0]
 
-	return fmt.Sprintf("weekly-%s", dateStr)
+	return fmt.Sprintf("weekly-%s-%s", dateStr, RandStringRunes(5))
 }
 
 func (w Worker) prepareGitEnv(newBranch string) error {
@@ -81,7 +81,7 @@ func (w Worker) gitCommitAndPush(newBranch string) error {
 
 	// if nothing changes, return nil to quit git procedure.
 	if strings.Contains(string(out), "nothing to commit") {
-		logrus.Infof("no cli doc changes happened, quit git procedure")
+		log.Infof("no changes happened, quit git procedure")
 		return ErrNothingChanged
 	}
 
@@ -135,8 +135,9 @@ Ref https://github.com/%s/%s/issues/%d
 	}
 
 	gc := gh.GetGitHubClient()
-	if _, _, err := gc.PullRequests.Create(gc.Owner(), gc.Repo(), newPR); err != nil {
-		logrus.Errorf("failed to create pull request: %v", err)
+	ctx := context.Background()
+	if _, _, err := gc.PullRequests.Create(ctx, gc.Owner(), gc.Repo(), newPR); err != nil {
+		log.Errorf("failed to create pull request: %v", err)
 		return err
 	}
 

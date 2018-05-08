@@ -18,7 +18,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/gorilla/mux"
 
 	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
@@ -77,7 +76,7 @@ func (s *Server) gitHubEventHandler(w http.ResponseWriter, r *http.Request) {
 	r.Body.Close()
 
 	if err := s.manager.HandleEvent(eventType, data); err != nil {
-		log.Errorf("Errored when handle webhook events: %v", err)
+		log.Errorf("Failed when handle webhook events: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -88,7 +87,7 @@ func (s *Server) gitHubEventHandler(w http.ResponseWriter, r *http.Request) {
 
 // pingHandler handles ping request to return health of server.
 func pingHandler(w http.ResponseWriter, r *http.Request) {
-	logrus.Debug("/ping request received")
+	log.Debug("/ping request received")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte{'O', 'K'})
 	return

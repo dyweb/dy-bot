@@ -42,6 +42,7 @@ func main() {
 	flagSet.StringVarP(&cfg.Repo, "repo", "r", "", "GitHub repo to which connect in GitHub")
 	flagSet.StringVarP(&cfg.HTTPListen, "listen", "l", "", "where does automan listened on")
 	flagSet.StringVarP(&cfg.AccessToken, "token", "t", "", "access token to have some control on resources")
+	flagSet.StringVarP(&cfg.WeeklyDir, "work_dir", "w", "", "dir to weekly")
 
 	cmdServe.Execute()
 }

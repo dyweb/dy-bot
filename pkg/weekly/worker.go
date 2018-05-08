@@ -1,6 +1,7 @@
 package weekly
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/dyweb/gommon/util/logutil"
@@ -42,7 +43,9 @@ func (w Worker) HandleWeekly(issue github.Issue) error {
 
 func (w Worker) removeWorkingLabel(issue github.Issue) error {
 	gc := gh.GetGitHubClient()
-	_, err := gc.Client.Issues.RemoveLabelForIssue(gc.Owner(), gc.Repo(), *issue.Number, labelWorking)
+	ctx := context.Background()
+
+	_, err := gc.Client.Issues.RemoveLabelForIssue(ctx, gc.Owner(), gc.Repo(), *issue.Number, labelWorking)
 	if err != nil {
 		return err
 	}
@@ -51,6 +54,7 @@ func (w Worker) removeWorkingLabel(issue github.Issue) error {
 
 func (w Worker) OpenNewIssue(oldIssue github.Issue) error {
 	gc := gh.GetGitHubClient()
+	ctx := context.Background()
 
 	weeklyNum, err := weeklyutil.GetWeeklyNumber(oldIssue)
 	if err != nil {
@@ -69,7 +73,8 @@ func (w Worker) OpenNewIssue(oldIssue github.Issue) error {
 		Assignee: &assignee,
 		Body:     &body,
 	}
-	_, _, err = gc.Client.Issues.Create(gc.Owner(), gc.Repo(), newIssue)
+
+	_, _, err = gc.Client.Issues.Create(ctx, gc.Owner(), gc.Repo(), newIssue)
 	if err != nil {
 		return err
 	}
@@ -77,31 +82,35 @@ func (w Worker) OpenNewIssue(oldIssue github.Issue) error {
 }
 
 func (w Worker) commitAndSubmitPR(issue github.Issue) error {
-	// newBranch := generateNewBranch()
-	// log.Infof("generate a new branch name %s", newBranch)
+	newBranch := generateNewBranch()
+	log.Infof("generate a new branch name %s", newBranch)
 
-	// // do prepare thing before cli and api doc generation.
-	// if err := w.prepareGitEnv(newBranch); err != nil {
-	// 	log.Errorf("failed to prepare git environment: %v", err)
-	// 	return err
-	// }
+	// do prepare thing before cli and api doc generation.
+	if err := w.prepareGitEnv(newBranch); err != nil {
+		log.Errorf("failed to prepare git environment: %v", err)
+		return err
+	}
 
-	// if err := w.buildWeekly(issue); err != nil {
-	// 	return err
-	// }
+	if err := w.buildWeekly(issue); err != nil {
+		return err
+	}
 
-	// // commit and push branch
-	// if err := w.gitCommitAndPush(newBranch); err != nil {
-	// 	if err == ErrNothingChanged {
-	// 		// if nothing changed, no need to submit pull request.
-	// 		return nil
-	// 	}
-	// 	return err
-	// }
+	// commit and push branch
+	if err := w.gitCommitAndPush(newBranch); err != nil {
+		if err == ErrNothingChanged {
+			// if nothing changed, no need to submit pull request.
+			return nil
+		}
+		return err
+	}
 
-	// // start to submit pull request
-	// if err := w.sumbitPR(newBranch); err != nil {
-	// 	return err
-	// }
+	num, err := weeklyutil.GetWeeklyNumber(issue)
+	if err != nil {
+		return err
+	}
+	// start to submit pull request
+	if err := w.sumbitPR(newBranch, num); err != nil {
+		return err
+	}
 	return nil
 }
