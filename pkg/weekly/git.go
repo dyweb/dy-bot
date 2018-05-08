@@ -120,12 +120,11 @@ func (w Worker) sumbitPR(branch string, issueNumber int) error {
 	title := "docs: auto generate pouch cli/api docs via code"
 	head := fmt.Sprintf("gaocegege-bot:%s", branch)
 	base := "master"
-	body := fmt.Sprintf(`Signed-off-by: gaocegege-bot powered by github.com/dyweb/dy-bot
+	body := fmt.Sprintf(`weekly: Generate
 
-Generate weekly.
+gaocegege-bot powered by github.com/dyweb/dy-bot
 
-Ref https://github.com/%s/%s/issues/%d
-`, w.config.Owner, w.config.Repo, issueNumber)
+Ref https://github.com/%s/%s/issues/%d`, w.config.Owner, w.config.Repo, issueNumber)
 
 	newPR := &github.NewPullRequest{
 		Title: &title,
