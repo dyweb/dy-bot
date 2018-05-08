@@ -16,8 +16,8 @@ package config
 
 // Config is the type for server config.
 type Config struct {
-	Owner       string
-	Repo        string
-	HTTPListen  string
-	AccessToken string
+	Owner       string `yaml:"owner"`
+	Repo        string `yaml:"repo"`
+	HTTPListen  string `yaml:"port"`
+	AccessToken string `yaml:"token"`
 }

@@ -15,16 +15,81 @@
 package server
 
 import (
+	"io/ioutil"
+	"net/http"
+
+	"github.com/Sirupsen/logrus"
+	"github.com/gorilla/mux"
+
 	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
+	"github.com/dyweb/dy-bot/pkg/event"
+	"github.com/dyweb/gommon/util/logutil"
 )
 
-type Server struct {
-}
+// DefaultAddress is the default address daemon will listen to.
+const DefaultAddress = ":6789"
 
-func (s *Server) Run() error {
-	return nil
+var log = logutil.NewPackageLogger()
+
+type Server struct {
+	config config.Config
+	// manager processes webhook event from GitHub.
+	manager *event.Manager
 }
 
 func NewServer(cfg config.Config) *Server {
-	return &Server{}
+	return &Server{
+		config:  cfg,
+		manager: event.NewManager(),
+	}
+}
+
+func (s *Server) Run() error {
+	// start webserver
+	listenAddress := s.config.HTTPListen
+	if listenAddress == "" {
+		listenAddress = DefaultAddress
+	}
+
+	r := mux.NewRouter()
+
+	// register ping api
+	r.HandleFunc("/ping", pingHandler).Methods("GET")
+
+	// github webhook API
+	r.HandleFunc("/events", s.gitHubEventHandler).Methods("POST")
+
+	log.Infof("Listening on %s for the repository %s/%s", listenAddress, s.config.Owner, s.config.Repo)
+	return http.ListenAndServe(listenAddress, r)
+}
+
+// gitHubEventHandler handles webhook events from github.
+func (s *Server) gitHubEventHandler(w http.ResponseWriter, r *http.Request) {
+	log.Info("/events request received")
+	eventType := r.Header.Get("X-Github-Event")
+
+	data, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	r.Body.Close()
+
+	if err := s.manager.HandleEvent(eventType, data); err != nil {
+		log.Error("Errored when handle webhook events: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	return
+}
+
+// pingHandler handles ping request to return health of server.
+func pingHandler(w http.ResponseWriter, r *http.Request) {
+	logrus.Debug("/ping request received")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte{'O', 'K'})
+	return
 }
