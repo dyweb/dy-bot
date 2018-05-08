@@ -1,4 +1,4 @@
-package log
+package logutil
 
 import (
 	"github.com/dyweb/gommon/log"

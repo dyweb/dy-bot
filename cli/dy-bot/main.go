@@ -17,9 +17,9 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/dyweb/dy-bot/cli/server"
-	"github.com/dyweb/dy-bot/cli/server/config"
-	logutil "github.com/dyweb/dy-bot/pkg/util/log"
+	"github.com/dyweb/dy-bot/cli/dy-bot/server"
+	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
+	"github.com/dyweb/dy-bot/pkg/util/logutil"
 )
 
 var log = logutil.NewPackageLogger()

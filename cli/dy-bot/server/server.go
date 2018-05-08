@@ -15,7 +15,7 @@
 package server
 
 import (
-	"github.com/dyweb/dy-bot/cli/server/config"
+	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
 )
 
 type Server struct {
