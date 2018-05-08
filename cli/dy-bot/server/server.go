@@ -77,7 +77,7 @@ func (s *Server) gitHubEventHandler(w http.ResponseWriter, r *http.Request) {
 	r.Body.Close()
 
 	if err := s.manager.HandleEvent(eventType, data); err != nil {
-		log.Error("Errored when handle webhook events: %v", err)
+		log.Errorf("Errored when handle webhook events: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

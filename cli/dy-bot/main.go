@@ -19,6 +19,7 @@ import (
 
 	"github.com/dyweb/dy-bot/cli/dy-bot/server"
 	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
+	"github.com/dyweb/dy-bot/pkg/gh"
 	"github.com/dyweb/dy-bot/pkg/util/logutil"
 )
 
@@ -30,6 +31,7 @@ func main() {
 		Use:  "Dongyue Bot",
 		Args: cobra.MinimumNArgs(0),
 		Run: func(cmd *cobra.Command, args []string) {
+			gh.InitGitHubClient(cfg.Owner, cfg.Repo, cfg.AccessToken)
 			s := server.NewServer(cfg)
 			log.Fatal(s.Run())
 		},
