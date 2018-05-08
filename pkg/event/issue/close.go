@@ -1,9 +1,8 @@
 package issue
 
 import (
+	"github.com/dyweb/dy-bot/pkg/weekly"
 	"github.com/google/go-github/github"
-
-	"github.com/dyweb/dy-bot/pkg/gh"
 )
 
 const (
@@ -15,19 +14,11 @@ func (p Processor) processEventClosed(issue github.Issue) error {
 	for _, label := range issue.Labels {
 		if *label.Name == labelWorking {
 			log.Info("The working issue is closed.")
-			if err := removeWorkingLabel(issue); err != nil {
+			worker := weekly.NewWorker(p.config)
+			if err := worker.HandleWeekly(issue); err != nil {
 				return err
 			}
 		}
-	}
-	return nil
-}
-
-func removeWorkingLabel(issue github.Issue) error {
-	gc := gh.GetGitHubClient()
-	_, err := gc.Client.Issues.RemoveLabelForIssue(gc.Owner(), gc.Repo(), *issue.Number, labelWorking)
-	if err != nil {
-		return err
 	}
 	return nil
 }

@@ -3,8 +3,10 @@ package event
 import (
 	"fmt"
 
-	"github.com/dyweb/dy-bot/pkg/event/issue"
 	"github.com/dyweb/gommon/util/logutil"
+
+	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
+	"github.com/dyweb/dy-bot/pkg/event/issue"
 )
 
 var log = logutil.NewPackageLogger()
@@ -17,11 +19,15 @@ type Processor interface {
 
 // Manager contains several specific processors.
 type Manager struct {
-	issueProcessor issue.Processor
+	config         config.Config
+	issueProcessor *issue.Processor
 }
 
-func NewManager() *Manager {
-	return &Manager{}
+func NewManager(config config.Config) *Manager {
+	return &Manager{
+		config:         config,
+		issueProcessor: issue.NewProcessor(config),
+	}
 }
 
 // HandleEvent processes an event received from github.

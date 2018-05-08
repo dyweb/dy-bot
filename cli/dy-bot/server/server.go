@@ -40,7 +40,7 @@ type Server struct {
 func NewServer(cfg config.Config) *Server {
 	return &Server{
 		config:  cfg,
-		manager: event.NewManager(),
+		manager: event.NewManager(cfg),
 	}
 }
 

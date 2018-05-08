@@ -3,12 +3,20 @@ package issue
 import (
 	"github.com/dyweb/gommon/util/logutil"
 
+	"github.com/dyweb/dy-bot/cli/dy-bot/server/config"
 	"github.com/dyweb/dy-bot/pkg/util/githubutil"
 )
 
 var log = logutil.NewPackageLogger()
 
 type Processor struct {
+	config config.Config
+}
+
+func NewProcessor(config config.Config) *Processor {
+	return &Processor{
+		config: config,
+	}
 }
 
 func (p Processor) Process(data []byte) error {

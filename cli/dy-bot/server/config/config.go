@@ -20,4 +20,5 @@ type Config struct {
 	Repo        string `yaml:"repo"`
 	HTTPListen  string `yaml:"port"`
 	AccessToken string `yaml:"token"`
+	WeeklyDir   string `yaml:"weekly_dir"`
 }
