@@ -12,3 +12,10 @@ fmt:
 .PHONY: test
 test:
 	go test -v -cover $(PKGS)
+
+.PHONY: dep-install
+dep-install:
+	dep ensure
+
+.PHONY: dep-update
+	dep ensure -update

@@ -1,5 +1,7 @@
 # Dongyue Bot
 
+[![Build Status](https://travis-ci.org/dyweb/dy-bot.svg?branch=master)](https://travis-ci.org/dyweb/dy-bot)
+
 Inspired by [pouchrobot](https://github.com/pouchcontainer/pouchrobot).
 
 ## Usage
@@ -9,6 +11,13 @@ Inspired by [pouchrobot](https://github.com/pouchcontainer/pouchrobot).
 dy-bot -h
 # start the server (no arguments, might change in the future)
 dy-bot
+````
+
+## Develop
+
+````bash
+make dep-install
+make install
 ````
 
 ## Features
