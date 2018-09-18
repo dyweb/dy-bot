@@ -60,6 +60,7 @@ func (w Worker) prepareGitEnv(newBranch string) error {
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to git checkout -b %s: %v", newBranch, err)
 	}
+	log.Infof("New branch: %s", newBranch)
 	return nil
 }
 
@@ -86,7 +87,7 @@ func (w Worker) gitCommitAndPush(newBranch string) error {
 	}
 
 	// git commit all the staged files.
-	cmd = exec.Command("git", "commit", "-s", "-m", "docs: auto generate pouch cli docs via code")
+	cmd = exec.Command("git", "commit", "-s", "-m", "Weekly: Add")
 	cmd.Dir = w.config.WeeklyDir
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to git commit -s -m : %v", err)
@@ -112,12 +113,12 @@ func (w Worker) gitCommitAndPush(newBranch string) error {
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to git push branch -D %s: %v", newBranch, err)
 	}
-
+	log.Infof("Succeeded to push the change")
 	return nil
 }
 
 func (w Worker) sumbitPR(branch string, issueNumber int) error {
-	title := "docs: auto generate pouch cli/api docs via code"
+	title := fmt.Sprintf("Weekly: Add %d", issueNumber)
 	head := fmt.Sprintf("gaocegege-bot:%s", branch)
 	base := "master"
 	body := fmt.Sprintf(`weekly: Generate
@@ -132,6 +133,7 @@ Ref https://github.com/%s/%s/issues/%d`, w.config.Owner, w.config.Repo, issueNum
 		Base:  &base,
 		Body:  &body,
 	}
+	log.Infof("PR: %v", newPR)
 
 	gc := gh.GetGitHubClient()
 	ctx := context.Background()
