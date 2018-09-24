@@ -29,12 +29,12 @@ func NewWorker(config config.Config) *Worker {
 }
 
 func (w Worker) HandleWeekly(issue github.Issue) error {
-	// if err := w.removeWorkingLabel(issue); err != nil {
-	// 	return err
-	// }
-	// if err := w.OpenNewIssue(issue); err != nil {
-	// 	return err
-	// }
+	if err := w.removeWorkingLabel(issue); err != nil {
+		return err
+	}
+	if err := w.OpenNewIssue(issue); err != nil {
+		return err
+	}
 	if err := w.commitAndSubmitPR(issue); err != nil {
 		return err
 	}
