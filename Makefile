@@ -19,3 +19,7 @@ dep-install:
 
 .PHONY: dep-update
 	dep ensure -update
+
+.PHONY: build
+build:
+	go build -o dy-bot ./cli/dy-bot/main.go
