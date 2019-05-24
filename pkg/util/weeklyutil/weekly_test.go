@@ -14,11 +14,11 @@ func TestGenerateTimeFromNumber(t *testing.T) {
 	}{
 		{
 			Case: 124,
-			Date: time.Date(2019, time.May, 24, 12, 0, 0, 0, beijing),
+			Date: time.Date(2019, time.May, 27, 12, 0, 0, 0, beijing),
 		},
 		{
 			Case: 125,
-			Date: time.Date(2019, time.May, 24, 12, 0, 0, 0, beijing).AddDate(0, 0, 7),
+			Date: time.Date(2019, time.May, 27, 12, 0, 0, 0, beijing).AddDate(0, 0, 7),
 		},
 	}
 
