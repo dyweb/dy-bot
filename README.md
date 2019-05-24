@@ -7,10 +7,12 @@ Inspired by [pouchrobot](https://github.com/pouchcontainer/pouchrobot).
 ## Usage
 
 ````bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/<your_private_key>
 # help
 dy-bot -h
 # start the server (no arguments, might change in the future)
-dy-bot
+dy-bot -o dyweb -r weekly -w <PATH_TO_WEEKLY_DIR> -l :8123 -t <GITHUBTOKEN>
 ````
 
 ## Develop

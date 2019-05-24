@@ -29,7 +29,7 @@ func (w Worker) buildWeekly(issue github.Issue) error {
 		return fmt.Errorf("failed to generate weekly: %v", err)
 	}
 
-	cmd = exec.Command("bash", "./scrips/build.sh")
+	cmd = exec.Command("bash", "./scripts/build.sh")
 	cmd.Dir = w.config.WeeklyDir
 	output, err = cmd.CombinedOutput()
 	if err != nil {

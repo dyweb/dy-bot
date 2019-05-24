@@ -36,14 +36,14 @@ func (w Worker) prepareGitEnv(newBranch string) error {
 	cmd = exec.Command("git", "fetch", "upstream", "master")
 	cmd.Dir = w.config.WeeklyDir
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("failed to git fetch upstreanm master: %v", err)
+		return fmt.Errorf("failed to git fetch upstream master: %v", err)
 	}
 
 	// rebase local master on origin/master
 	cmd = exec.Command("git", "rebase", "upstream/master")
 	cmd.Dir = w.config.WeeklyDir
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("failed to git rebase upstreanm/master: %v", err)
+		return fmt.Errorf("failed to git rebase upstream/master: %v", err)
 	}
 
 	// push local master to origin/master
