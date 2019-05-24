@@ -17,12 +17,12 @@ func GetWeeklyNumber(issue github.Issue) (int, error) {
 func GenerateTimeFromNumber(number int) time.Time {
 	secondsEastOfUTC := int((8 * time.Hour).Seconds())
 	beijing := time.FixedZone("Beijing Time", secondsEastOfUTC)
-	// Weekly-94 is 2018.10.01
-	dateFor74 := time.Date(2018, time.October, 1, 12, 0, 0, 0, beijing)
+	// Weekly-124 is 2019.05.24
+	dateFor124 := time.Date(2019, time.May, 24, 12, 0, 0, 0, beijing)
 
-	weeksToAdd := number - 94
-	dateFor74.AddDate(0, 0, 7*weeksToAdd)
-	return dateFor74.AddDate(0, 0, 7*weeksToAdd)
+	weeksToAdd := number - 124
+	dateFor124.AddDate(0, 0, 7*weeksToAdd)
+	return dateFor124.AddDate(0, 0, 7*weeksToAdd)
 }
 
 func GetFileNameFromTime(date time.Time) string {
